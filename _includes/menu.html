@@ -1,0 +1,61 @@
+{% assign menu = site.data.menu %}
+
+{% if menu %}
+<nav class="site-navigation site-nav" role="navigation">
+  <ul class="nav-menu">
+
+    <!-- Home -->
+    <li class="nav-item {% if page.url == '/' %}active{% endif %}">
+      <a class="nav-link" href="{{ '/' | prepend: site.baseurl }}">
+        Home
+      </a>
+    </li>
+
+    <!-- Dynamic Menu -->
+    {% for item in menu %}
+
+      {% if item.children %}
+        <li class="nav-item dropdown {% if page.url == item.url %}active{% endif %}">
+          
+          <button class="dropbtn">
+            {{ item.title }}
+            <span class="arrow">▼</span>
+          </button>
+
+          <div class="dropdown-content">
+            {% for child in item.children %}
+
+              {% if child.url contains 'http' %}
+                <a href="{{ child.url }}">
+                  {{ child.title }}
+                </a>
+              {% else %}
+                <a href="{{ child.url | prepend: site.baseurl }}">
+                  {{ child.title }}
+                </a>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+        </li>
+
+      {% else %}
+        <li class="nav-item {% if page.url == item.url %}active{% endif %}">
+          
+          {% if item.url contains 'http' %}
+            <a class="nav-link" href="{{ item.url }}">
+              {{ item.title }}
+            </a>
+          {% else %}
+            <a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">
+              {{ item.title }}
+            </a>
+          {% endif %}
+
+        </li>
+      {% endif %}
+
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
